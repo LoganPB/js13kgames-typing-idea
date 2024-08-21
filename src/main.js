@@ -132,13 +132,31 @@ const meals = [
 
 const qs = (e) => document.querySelector(e);
 const ce = (e) => document.createElement(e);
+
+//People order list
+const listPeople = qs("div#listHorizontal");
+
 //Input event
 const inp = qs("#i");
 inp?.addEventListener("keydown", (ke) => {
   console.log(orders);
   if (ke.key === "Enter") {
+    const firstOrder = orders[0];
+    console.log("firs", firstOrder);
     const e = ce("li");
     e.textContent = inp.value;
+    console.log("first", firstOrder, firstOrder.includes(inp.value));
+    if (firstOrder.includes(inp.value)) {
+      e.style.color = "green";
+      firstOrder.splice(firstOrder.indexOf(inp.value), 1);
+      if (firstOrder.length === 0) {
+        orders.pop();
+        listPeople?.firstChild.remove();
+      }
+    } else {
+      e.style.color = "red";
+    }
+
     qs("div>ul")?.append(e);
     inp.value = "";
   }
@@ -155,10 +173,6 @@ const generateOrder = (difficulty) => {
       .map((e) => generateRandomMinMax(1, 6) + " " + e);
   }
 };
-console.log(generateOrder("easy"));
-
-//People order generation
-const listPeople = qs("div#listHorizontal");
 
 const addNewOrder = (difficulty) => {
   const orderDiv = ce("div");
@@ -171,12 +185,16 @@ const addNewOrder = (difficulty) => {
     orderDiv.append(el);
   });
   listPeople?.append(orderDiv);
-  orders.unshift(newOrder);
+  orders.push(newOrder);
 };
 
 function gameloop() {
   addNewOrder("easy");
-  setTimeout(gameloop, 2000);
+  const gameTO = setTimeout(gameloop, 5000);
+  if (orders.length === 12) {
+    clearTimeout(gameTO);
+    console.log("GAME OVER");
+  }
 }
 
 gameloop();
