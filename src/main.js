@@ -1,5 +1,6 @@
 import "./style.css";
-
+const minItem = 1;
+const maxItem = 1;
 const orders = [];
 
 const meals = [
@@ -150,7 +151,7 @@ inp?.addEventListener("keydown", (ke) => {
       e.style.color = "green";
       firstOrder.splice(firstOrder.indexOf(inp.value), 1);
       if (firstOrder.length === 0) {
-        orders.pop();
+        orders.shift();
         listPeople?.firstChild.remove();
       }
     } else {
@@ -169,8 +170,8 @@ const generateOrder = (difficulty) => {
   if (difficulty === "easy") {
     return meals
       .sort(() => Math.random() - 0.5)
-      .slice(0, generateRandomMinMax(1, 3))
-      .map((e) => generateRandomMinMax(1, 6) + " " + e);
+      .slice(0, generateRandomMinMax(minItem, maxItem))
+      .map((e) => generateRandomMinMax(minItem, maxItem) + " " + e);
   }
 };
 
