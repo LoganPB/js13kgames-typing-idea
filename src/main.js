@@ -1,10 +1,11 @@
 import "./style.css";
-let minItem = 1;
-let maxItem = 4;
 const orders = [];
 let lastIdOrder = 0;
 let delay = 4000;
-let orderLimit = 12;
+let zIndex = 1000;
+let currentDifficulty = "easy";
+
+let numberOfValidOrders = 0;
 
 const meals = [
   "smoothies",
@@ -134,6 +135,21 @@ const meals = [
   "raspberries",
 ];
 
+const difficultyLevel = {
+  easy: {
+    minItem: 1,
+    maxItem: 2,
+  },
+  medium: {
+    minItem: 2,
+    maxItem: 4,
+  },
+  hard: {
+    minItem: 3,
+    maxItem: 6,
+  },
+};
+
 const qs = (e) => document.querySelector(e);
 const ce = (e) => document.createElement(e);
 const inp = qs("#i");
@@ -141,11 +157,16 @@ const inp = qs("#i");
 //People order list
 const listPeople = qs("div#listHorizontal");
 
+function updateOrderNumberValue(newValue) {
+  const orderNumber = qs("div#stats>div#numberOfCurrentOrders");
+  orderNumber.textContent = newValue + " / 12";
+}
 function removeLastOrder() {
   const inp = qs("#i");
   orders.shift();
   listPeople?.firstChild.remove();
   inp.value = "";
+  updateOrderNumberValue(orders.length);
   return;
 }
 
@@ -174,12 +195,13 @@ inp?.addEventListener("keydown", (ke) => {
       if (firstOrder.order.length === 0) {
         removeLastOrder();
       }
+      numberOfValidOrders++;
     } else {
       e.style.color = "red";
     }
 
     inp.value = "";
-    qs("div>ul")?.append(e);
+    qs("div#orderInput>ul")?.append(e);
   }
 });
 
@@ -193,9 +215,18 @@ const generateOrder = (difficulty) => {
     return {
       order: meals
         .sort(() => Math.random() - 0.5)
-        .slice(0, generateRandomMinMax(minItem, maxItem))
+        .slice(
+          0,
+          generateRandomMinMax(
+            difficultyLevel[difficulty].minItem,
+            difficultyLevel[difficulty].maxItem,
+          ),
+        )
         .reduce((acc, e, idx, elements) => {
-          let nb = generateRandomMinMax(minItem, maxItem);
+          let nb = generateRandomMinMax(
+            difficultyLevel[difficulty].minItem,
+            difficultyLevel[difficulty].maxItem,
+          );
 
           if (idx === elements.length - 1) {
             if (shouldEqual13) {
@@ -218,19 +249,31 @@ const addNewOrder = (difficulty) => {
   const orderDiv = ce("div");
   orderDiv.className = "order";
   const newOrder = generateOrder(difficulty);
-  orderDiv.innerHTML = "Order id: " + newOrder.orderId;
-
+  const title = ce("h3");
+  title.innerHTML = newOrder.orderId;
+  orderDiv.append(title);
+  orderDiv.style.zIndex = zIndex - 1;
+  zIndex--;
+  const list = ce("ul");
   newOrder.order.forEach((e) => {
     const el = ce("li");
     el.innerHTML = e;
-    orderDiv.append(el);
+    list.append(el);
   });
+  orderDiv.append(list);
   listPeople?.append(orderDiv);
   orders.push(newOrder);
+  updateOrderNumberValue(orders.length);
 };
 
 function gameloop() {
-  addNewOrder("easy");
+  (currentDifficulty =
+    numberOfValidOrders < 5
+      ? "easy"
+      : numberOfValidOrders < 10
+        ? "medium"
+        : "hard"),
+    addNewOrder(currentDifficulty);
   const gameTO = setTimeout(gameloop, delay);
   if (orders.length === 12) {
     clearTimeout(gameTO);
