@@ -6,6 +6,8 @@ let zIndex = 1000;
 let currentDifficulty = "easy";
 
 let numberOfValidOrders = 0;
+let lastCommandHasError = false;
+let scoreValue = 0;
 
 const meals = [
   "smoothies",
@@ -167,7 +169,14 @@ function removeLastOrder() {
   listPeople?.firstChild.remove();
   inp.value = "";
   updateOrderNumberValue(orders.length);
+  lastCommandHasError = false;
   return;
+}
+
+function updateScore(newScore) {
+  const score = qs("div#score");
+  scoreValue += newScore;
+  score.textContent = scoreValue;
 }
 
 //Input event
@@ -175,17 +184,25 @@ inp?.addEventListener("keydown", (ke) => {
   console.log(orders);
   if (ke.key === "Enter") {
     const firstOrder = orders[0];
-
+    if (!firstOrder) return;
     // refuse command if total equal 13
+    const e = ce("li");
     if (
+      firstOrder &&
       firstOrder.shouldEqual13 &&
       inp.value === `refuse order ${firstOrder.orderId}`
     ) {
       removeLastOrder();
+      updateScore(20);
+      e.textContent = "Order correctly refused";
+      inp.value = "";
+      e.style.color = "green";
+      qs("div#orderInput>ul")?.append(e);
+      return;
+    } else {
+      e.textContent = inp.value;
     }
 
-    const e = ce("li");
-    e.textContent = inp.value;
     if (
       firstOrder.order.includes(inp.value.trim()) &&
       !firstOrder.shouldEqual13
@@ -194,10 +211,13 @@ inp?.addEventListener("keydown", (ke) => {
       firstOrder.order.splice(firstOrder.order.indexOf(inp.value), 1);
       if (firstOrder.order.length === 0) {
         removeLastOrder();
+        if (!lastCommandHasError) updateScore(30);
+        else updateScore(10);
       }
       numberOfValidOrders++;
     } else {
       e.style.color = "red";
+      lastCommandHasError = true;
     }
 
     inp.value = "";
@@ -209,40 +229,38 @@ const generateRandomMinMax = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
 const generateOrder = (difficulty) => {
-  if (difficulty === "easy") {
-    let shouldEqual13 = Math.random() > 0.5;
-    let numberOfItems = 0;
-    return {
-      order: meals
-        .sort(() => Math.random() - 0.5)
-        .slice(
-          0,
-          generateRandomMinMax(
-            difficultyLevel[difficulty].minItem,
-            difficultyLevel[difficulty].maxItem,
-          ),
-        )
-        .reduce((acc, e, idx, elements) => {
-          let nb = generateRandomMinMax(
-            difficultyLevel[difficulty].minItem,
-            difficultyLevel[difficulty].maxItem,
-          );
+  let shouldEqual13 = Math.random() > 0.5;
+  let numberOfItems = 0;
+  return {
+    order: meals
+      .sort(() => Math.random() - 0.5)
+      .slice(
+        0,
+        generateRandomMinMax(
+          difficultyLevel[difficulty].minItem,
+          difficultyLevel[difficulty].maxItem,
+        ),
+      )
+      .reduce((acc, e, idx, elements) => {
+        let nb = generateRandomMinMax(
+          difficultyLevel[difficulty].minItem,
+          difficultyLevel[difficulty].maxItem,
+        );
 
-          if (idx === elements.length - 1) {
-            if (shouldEqual13) {
-              nb = 13 - numberOfItems;
-            }
+        if (idx === elements.length - 1) {
+          if (shouldEqual13) {
+            nb = 13 - numberOfItems;
           }
-          numberOfItems += nb;
-          if (numberOfItems === 13) shouldEqual13 = true;
-          e = nb + " " + e;
-          acc.push(e);
-          return acc;
-        }, []),
-      shouldEqual13,
-      orderId: ++lastIdOrder,
-    };
-  }
+        }
+        numberOfItems += nb;
+        if (numberOfItems === 13) shouldEqual13 = true;
+        e = nb + " " + e;
+        acc.push(e);
+        return acc;
+      }, []),
+    shouldEqual13,
+    orderId: ++lastIdOrder,
+  };
 };
 
 const addNewOrder = (difficulty) => {
@@ -267,18 +285,19 @@ const addNewOrder = (difficulty) => {
 };
 
 function gameloop() {
-  (currentDifficulty =
+  currentDifficulty =
     numberOfValidOrders < 5
       ? "easy"
       : numberOfValidOrders < 10
         ? "medium"
-        : "hard"),
-    addNewOrder(currentDifficulty);
-  const gameTO = setTimeout(gameloop, delay);
+        : "hard";
+  console.log("new order");
+  addNewOrder(currentDifficulty);
   if (orders.length === 12) {
-    clearTimeout(gameTO);
+    clearInterval(gameTO);
     console.log("GAME OVER");
   }
 }
 
+const gameTO = setInterval(gameloop, delay);
 gameloop();

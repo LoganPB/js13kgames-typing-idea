@@ -5,7 +5,16 @@
     font-family: "Arial", sans-serif;
 }
 
+html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
 body {
+    display: flex;
+    flex-direction: column;
+    justify-items: space-between;
     width: 100%;
     height: 100%;
     background-color: black;
@@ -16,11 +25,10 @@ div#stats {
 }
 
 div#listHorizontal {
-    padding: 100px;
-    margin: 20px 0px 20px 0px;
     display: flex;
     flex-direction: row-reverse;
     overflow-x: auto;
+    height: 100%;
 }
 
 div#listHorizontal div.order {
@@ -41,28 +49,30 @@ div#listHorizontal div.order h3 {
     margin-top: 10px;
     margin-bottom: 30px;
 }
+
 div#orderInput {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 4px solid white;
     width: 70%;
+    margin: auto;
     background: transparent;
     border-radius: 20px;
     font-size: 30px;
-    height: 50px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+div#orderInput ul {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 div#orderInput input {
+    border: 4px solid white;
     width: 100%;
     margin: auto;
     background-color: transparent;
-    border: none;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 100%;
+    height: 40%;
     outline: none;
     padding: 0px 40px;
     font-size: 30px;
