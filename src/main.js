@@ -230,34 +230,33 @@ const generateRandomMinMax = (min, max) =>
 
 const generateOrder = (difficulty) => {
   let shouldEqual13 = Math.random() > 0.5;
-  let numberOfItems = 0;
-  return {
-    order: meals
-      .sort(() => Math.random() - 0.5)
-      .slice(
-        0,
-        generateRandomMinMax(
-          difficultyLevel[difficulty].minItem,
-          difficultyLevel[difficulty].maxItem,
-        ),
-      )
-      .reduce((acc, e, idx, elements) => {
-        let nb = generateRandomMinMax(
-          difficultyLevel[difficulty].minItem,
-          difficultyLevel[difficulty].maxItem,
-        );
+  let numberOfItems = shouldEqual13 ? 13 : generateRandomMinMax(1, 25);
+  shouldEqual13 = numberOfItems === 13;
 
-        if (idx === elements.length - 1) {
-          if (shouldEqual13) {
-            nb = 13 - numberOfItems;
-          }
-        }
-        numberOfItems += nb;
-        if (numberOfItems === 13) shouldEqual13 = true;
-        e = nb + " " + e;
-        acc.push(e);
-        return acc;
-      }, []),
+  const selectedMeals = meals
+    .sort(() => Math.random() - 0.5)
+    .slice(
+      0,
+      generateRandomMinMax(
+        difficultyLevel[difficulty].minItem,
+        difficultyLevel[difficulty].maxItem,
+      ),
+    );
+
+  return {
+    order: selectedMeals.reduce((acc, e, idx, elements) => {
+      let maxNb = Math.max(1, numberOfItems - elements.length - idx - 1);
+      let nb = generateRandomMinMax(1, maxNb);
+
+      if (idx === elements.length - 1 && shouldEqual13) {
+        nb = numberOfItems;
+      }
+      numberOfItems = numberOfItems - nb > 0 ? numberOfItems - nb : 1;
+
+      e = nb + " " + e;
+      acc.push(e);
+      return acc;
+    }, []),
     shouldEqual13,
     orderId: ++lastIdOrder,
   };
@@ -285,12 +284,12 @@ const addNewOrder = (difficulty) => {
 };
 
 function gameloop() {
-  currentDifficulty =
-    numberOfValidOrders < 5
-      ? "easy"
-      : numberOfValidOrders < 10
-        ? "medium"
-        : "hard";
+  currentDifficulty = "hard";
+  // numberOfValidOrders < 5
+  //   ? "easy"
+  //   : numberOfValidOrders < 10
+  //     ? "medium"
+  //     : "hard";
   console.log("new order");
   addNewOrder(currentDifficulty);
   if (orders.length === 12) {
