@@ -304,8 +304,15 @@ function gameloop() {
   if (orders.length === 12) {
     clearInterval(gameTO);
     qs("div#gameOverScreen").style.display = "block"
-    const goText = `Oh no, you've lost! Your score is : ${scoreValue}`
-    qs("div#gameOverScreen div").append(goText)
+    const goText = `Oh no, you've lost! Your score is : ${scoreValue} <br/>`
+    const goTextDiv = qs("div#gameOverScreen div#goText")
+    goTextDiv.append(goText)
+
+    //check localstorage for highscore
+    const hs = localStorage.getItem("highscore")
+    let hsText = ""
+    if (!hs || scoreValue > hs) { localStorage.setItem("highscore", scoreValue); hsText = `<br/>Your new highscore is ${scoreValue}` } else { hsText = `Your highscore is ${hs}`; }
+    goTextDiv.innerHTML = goText + hsText
   }
 }
 
