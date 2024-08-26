@@ -156,12 +156,21 @@ const qs = (e) => document.querySelector(e);
 const ce = (e) => document.createElement(e);
 const inp = qs("#i");
 
+qs("input[type='button']").addEventListener("click", () => {
+  launchGame()
+})
+
 //People order list
 const listPeople = qs("div#listHorizontal");
 
+function launchGame() {
+  qs('div#startScreen').style.display = "none"
+  gameloop()
+}
+
 function updateOrderNumberValue(newValue) {
   const orderNumber = qs("div#stats>div#numberOfCurrentOrders");
-  orderNumber.textContent = newValue + " / 12";
+  orderNumber.textContent = (newValue > 1 ? "Orders: " : "Order :") + newValue + " / 12";
 }
 function removeLastOrder() {
   const inp = qs("#i");
@@ -176,7 +185,7 @@ function removeLastOrder() {
 function updateScore(newScore) {
   const score = qs("div#score");
   scoreValue += newScore;
-  score.textContent = scoreValue;
+  score.textContent = "Score: " + scoreValue;
 }
 
 //Input event
@@ -299,4 +308,3 @@ function gameloop() {
 }
 
 const gameTO = setInterval(gameloop, delay);
-gameloop();

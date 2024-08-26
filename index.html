@@ -1,26 +1,47 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>JS13KGames</title>
-    </head>
-    <body>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS13KGames</title>
+</head>
+
+<body>
+    <div id="startScreen">
+        <div>
+            <h1>Never 13 at the table</h1>
+
+            <p>The goal of this game is to write the different orders to avoid being 13</p>
+            <p>You can only have 12 orders at max.</p><br />
+            <p>To valid an order, you have to write each element down the input bar, exemple: 4 eggs</p>
+            <p>But be careful, if the total element of an order equals 13, <br /> you must just refuse it by writing :
+                refuse
+                order
+                ORDER_ID</p>
+
+            <br />
+            <p>Have fun!</p>
+
+            <input type=button value="Start the game" />
+        </div>
+    </div>
+    <div id="gameScreen">
         <div id="stats">
-            <div id="score"></div>
-            <div id="numberOfCurrentOrders"></div>
+            <div id="score">Score:</div>
+            <div id="numberOfCurrentOrders">Orders: </div>
         </div>
         <div id="listHorizontal"></div>
         <div id="orderInput">
             <ul></ul>
-            <input
-                name="commandInput"
-                type="text"
-                id="i"
-                autofocus
-                autocomplete="off"
-            />
+            <input name="commandInput" type="text" id="i" autofocus autocomplete="off" />
         </div>
-        <script type="module" src="/src/main.js"></script>
-    </body>
+    </div>
+    <div id="gameOverScreen">
+        <h1>Game Over</h1>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+
 </html>
