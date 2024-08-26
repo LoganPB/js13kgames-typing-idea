@@ -293,17 +293,19 @@ const addNewOrder = (difficulty) => {
 };
 
 function gameloop() {
-  currentDifficulty = "hard";
-  // numberOfValidOrders < 5
-  //   ? "easy"
-  //   : numberOfValidOrders < 10
-  //     ? "medium"
-  //     : "hard";
-  console.log("new order");
+  currentDifficulty =
+    numberOfValidOrders < 5
+      ? "easy"
+      : numberOfValidOrders < 10
+        ? "medium"
+        : "hard";
+  delay = currentDifficulty === "easy" ? 4000 : currentDifficulty === "medium" ? 3000 : 2000
   addNewOrder(currentDifficulty);
   if (orders.length === 12) {
     clearInterval(gameTO);
-    console.log("GAME OVER");
+    qs("div#gameOverScreen").style.display = "block"
+    const goText = `Oh no, you've lost! Your score is : ${scoreValue}`
+    qs("div#gameOverScreen div").append(goText)
   }
 }
 

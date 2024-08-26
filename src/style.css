@@ -20,7 +20,7 @@ body {
     background-color: black;
 }
 
-div#startScreen  {
+div#startScreen, div#gameOverScreen {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -29,12 +29,16 @@ div#startScreen  {
     color: white;
 }
 
-div#startScreen div {
+div#gameOverScreen {
+    display: none;
+}
+
+div#startScreen div, div#gameOverScreen div{
     width: 70%;
     margin: auto;
 }
 
-div#startScreen div h1 {
+div#startScreen div h1 , div#gameOverScreen div h1{
     text-align: center;
     margin: 50px 0px;
 }
