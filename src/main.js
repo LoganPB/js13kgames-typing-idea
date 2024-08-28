@@ -306,7 +306,7 @@ function gameloop() {
         : "hard";
   delay = currentDifficulty === "easy" ? 4000 : currentDifficulty === "medium" ? 3000 : 2000
   addNewOrder(currentDifficulty);
-  if (orders.length === 1000) {
+  if (orders.length === 12) {
     clearInterval(gameTO);
     qs("div#gameOverScreen").style.display = "block"
     const goText = `Oh no, you've lost! Your score is : ${scoreValue} <br/>`
