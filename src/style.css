@@ -85,6 +85,7 @@ div#listHorizontal div.order {
     background-color: var(--accent1);
     padding-left: 15px;
     margin-left: -150px;
+    margin-right: 10px;
 }
 
 div#listHorizontal div.order h3 {
@@ -124,6 +125,7 @@ div#orderInput input {
     /* font-size: 30px; */
     color: var(--accent2);
     border-radius: 90px;
+    margin-bottom: 10px;
 }
 
 div ul li {
