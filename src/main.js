@@ -162,9 +162,13 @@ qs("input[type='button']").addEventListener("click", () => {
 
 //People order list
 const listPeople = qs("div#listHorizontal");
+let gameTO = null
 
 function launchGame() {
   qs('div#startScreen').style.display = "none"
+  qs('div#stats').style.display = "flex"
+  gameTO = setInterval(gameloop, delay);
+
   gameloop()
 }
 
@@ -205,7 +209,7 @@ inp?.addEventListener("keydown", (ke) => {
       updateScore(20);
       e.textContent = "Order correctly refused";
       inp.value = "";
-      e.style.color = "green";
+      // e.style.color = "var(--accent2)";
       qs("div#orderInput>ul")?.append(e);
       return;
     } else {
@@ -216,7 +220,7 @@ inp?.addEventListener("keydown", (ke) => {
       firstOrder.order.includes(inp.value.trim()) &&
       !firstOrder.shouldEqual13
     ) {
-      e.style.color = "green";
+      // e.style.color = "green";
       firstOrder.order.splice(firstOrder.order.indexOf(inp.value), 1);
       if (firstOrder.order.length === 0) {
         removeLastOrder();
@@ -293,6 +297,7 @@ const addNewOrder = (difficulty) => {
 };
 
 function gameloop() {
+
   currentDifficulty =
     numberOfValidOrders < 5
       ? "easy"
@@ -301,7 +306,7 @@ function gameloop() {
         : "hard";
   delay = currentDifficulty === "easy" ? 4000 : currentDifficulty === "medium" ? 3000 : 2000
   addNewOrder(currentDifficulty);
-  if (orders.length === 12) {
+  if (orders.length === 1000) {
     clearInterval(gameTO);
     qs("div#gameOverScreen").style.display = "block"
     const goText = `Oh no, you've lost! Your score is : ${scoreValue} <br/>`
@@ -316,4 +321,3 @@ function gameloop() {
   }
 }
 
-const gameTO = setInterval(gameloop, delay);
