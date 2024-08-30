@@ -200,33 +200,36 @@ inp?.addEventListener("keydown", (ke) => {
     if (!firstOrder) return;
     // refuse command if total equal 13
     const e = ce("li");
+    const inpValue = inp.value
     if (
       firstOrder &&
       firstOrder.shouldEqual13 &&
-      inp.value === `refuse order ${firstOrder.orderId}`
+      inpValue === `refuse order ${firstOrder.orderId}`
     ) {
       removeLastOrder();
       updateScore(20);
       e.textContent = "Order correctly refused";
       inp.value = "";
-      // e.style.color = "var(--accent2)";
       qs("div#orderInput>ul")?.append(e);
       return;
     } else {
-      e.textContent = inp.value;
+      e.textContent = inpValue;
     }
 
     if (
-      firstOrder.order.includes(inp.value.trim()) &&
+      firstOrder.order.includes(inpValue) &&
       !firstOrder.shouldEqual13
     ) {
       // e.style.color = "green";
-      firstOrder.order.splice(firstOrder.order.indexOf(inp.value), 1);
+      firstOrder.order.splice(firstOrder.order.indexOf(inpValue), 1);
       if (firstOrder.order.length === 0) {
         removeLastOrder();
         if (!lastCommandHasError) updateScore(30);
         else updateScore(10);
       }
+      const ordLines = qsa("div#listHorizontal>div ul>li")
+      const lineToThrough = Array.from(ordLines).find((line) => { console.log("line", line.textContent); return line.textContent === inpValue })
+      if (lineToThrough) lineToThrough.style.textDecoration = "line-through"
       numberOfValidOrders++;
     } else {
       e.style.color = "red";
@@ -297,13 +300,13 @@ const addNewOrder = (difficulty) => {
 };
 
 function gameloop() {
-
-  currentDifficulty =
-    numberOfValidOrders < 5
-      ? "easy"
-      : numberOfValidOrders < 10
-        ? "medium"
-        : "hard";
+  // currentDifficulty =
+  //   numberOfValidOrders < 5
+  //     ? "easy"
+  //     : numberOfValidOrders < 10
+  //       ? "medium"
+  //       : "hard";
+  currentDifficulty = "hard"
   delay = currentDifficulty === "easy" ? 4000 : currentDifficulty === "medium" ? 3000 : 2000
   addNewOrder(currentDifficulty);
   if (orders.length === 12) {
