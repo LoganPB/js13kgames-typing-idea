@@ -8,6 +8,7 @@ let currentDifficulty = "easy";
 let numberOfValidOrders = 0;
 let lastCommandHasError = false;
 let scoreValue = 0;
+let ordersLimit = 12;
 
 const meals = [
   "smoothies",
@@ -153,6 +154,7 @@ const difficultyLevel = {
 };
 
 const qs = (e) => document.querySelector(e);
+const qsa = (e) => document.querySelectorAll(e);
 const ce = (e) => document.createElement(e);
 const inp = qs("#i");
 
@@ -200,7 +202,7 @@ inp?.addEventListener("keydown", (ke) => {
     if (!firstOrder) return;
     // refuse command if total equal 13
     const e = ce("li");
-    const inpValue = inp.value
+    const inpValue = inp.value.trim()
     if (
       firstOrder &&
       firstOrder.shouldEqual13 &&
@@ -214,6 +216,7 @@ inp?.addEventListener("keydown", (ke) => {
       return;
     } else {
       e.textContent = inpValue;
+
     }
 
     if (
