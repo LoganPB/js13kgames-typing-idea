@@ -176,7 +176,7 @@ function launchGame() {
 
 function updateOrderNumberValue(newValue) {
   const orderNumber = qs("div#stats>div#numberOfCurrentOrders");
-  orderNumber.textContent = (newValue > 1 ? "Orders: " : "Order :") + newValue + " / 12";
+  orderNumber.textContent = (newValue > 1 ? "Orders: " : "Order :") + newValue + " / " + ordersLimit;
 }
 function removeLastOrder() {
   const inp = qs("#i");
@@ -194,9 +194,12 @@ function updateScore(newScore) {
   score.textContent = "Score: " + scoreValue;
 }
 
+function updateOrdersLimit(_orderLimits) {
+  ordersLimit = _orderLimits
+  updateOrderNumberValue(orders.length)
+}
 //Input event
 inp?.addEventListener("keydown", (ke) => {
-  console.log(orders);
   if (ke.key === "Enter") {
     const firstOrder = orders[0];
     if (!firstOrder) return;
@@ -231,11 +234,14 @@ inp?.addEventListener("keydown", (ke) => {
         else updateScore(10);
       }
       const ordLines = qsa("div#listHorizontal>div ul>li")
-      const lineToThrough = Array.from(ordLines).find((line) => { console.log("line", line.textContent); return line.textContent === inpValue })
+      const lineToThrough = Array.from(ordLines).find((line) => { return line.textContent === inpValue })
       if (lineToThrough) lineToThrough.style.textDecoration = "line-through"
       numberOfValidOrders++;
     } else {
       e.style.color = "red";
+      updateOrdersLimit(ordersLimit - 1)
+
+      checkIfGameOver()
       lastCommandHasError = true;
     }
 
@@ -296,11 +302,20 @@ const addNewOrder = (difficulty) => {
     el.innerHTML = e;
     list.append(el);
   });
+
+
   orderDiv.append(list);
   listPeople?.append(orderDiv);
   orders.push(newOrder);
   updateOrderNumberValue(orders.length);
+  checkIfGameOver()
 };
+
+function checkIfGameOver() {
+  if (ordersLimit === 0 || orders.length > ordersLimit) {
+    gameover()
+  }
+}
 
 function gameloop() {
   // currentDifficulty =
@@ -313,17 +328,22 @@ function gameloop() {
   delay = currentDifficulty === "easy" ? 4000 : currentDifficulty === "medium" ? 3000 : 2000
   addNewOrder(currentDifficulty);
   if (orders.length === 12) {
-    clearInterval(gameTO);
-    qs("div#gameOverScreen").style.display = "block"
-    const goText = `Oh no, you've lost! Your score is : ${scoreValue} <br/>`
-    const goTextDiv = qs("div#gameOverScreen div#goText")
-    goTextDiv.append(goText)
-
-    //check localstorage for highscore
-    const hs = localStorage.getItem("highscore")
-    let hsText = ""
-    if (!hs || scoreValue > hs) { localStorage.setItem("highscore", scoreValue); hsText = `<br/>Your new highscore is ${scoreValue}` } else { hsText = `Your highscore is ${hs}`; }
-    goTextDiv.innerHTML = goText + hsText
+    gameover()
   }
+}
+
+function gameover() {
+  clearInterval(gameTO);
+  qs("div#gameOverScreen").style.display = "block"
+  const goText = `Oh no, you've lost! Your score is : ${scoreValue} <br/>`
+  const goTextDiv = qs("div#gameOverScreen div#goText")
+  goTextDiv.append(goText)
+
+  //check localstorage for highscore
+  const hs = localStorage.getItem("highscore")
+  let hsText = ""
+  if (!hs || scoreValue > hs) { localStorage.setItem("highscore", scoreValue); hsText = `<br/>Your new highscore is ${scoreValue}` } else { hsText = `Your highscore is ${hs}`; }
+  goTextDiv.innerHTML = goText + hsText
+
 }
 
