@@ -185,7 +185,14 @@ function removeLastOrder() {
   inp.value = "";
   updateOrderNumberValue(orders.length);
   lastCommandHasError = false;
+  setBGOnFirstOrder()
   return;
+}
+
+function setBGOnFirstOrder() {
+  // orders.forEach(o => o.classList.filter(c => c != "withBG"))
+  // orders.length > 0 && orders[0].classList.push("withBG")
+  listPeople.firstChild.classList.add("withBG")
 }
 
 function updateScore(newScore) {
@@ -226,7 +233,6 @@ inp?.addEventListener("keydown", (ke) => {
       firstOrder.order.includes(inpValue) &&
       !firstOrder.shouldEqual13
     ) {
-      // e.style.color = "green";
       firstOrder.order.splice(firstOrder.order.indexOf(inpValue), 1);
       if (firstOrder.order.length === 0) {
         removeLastOrder();
@@ -246,7 +252,7 @@ inp?.addEventListener("keydown", (ke) => {
     }
 
     inp.value = "";
-    qs("div#orderInput>ul")?.append(e);
+    // qs("div#orderInput>ul")?.append(e);
   }
 });
 
@@ -309,6 +315,7 @@ const addNewOrder = (difficulty) => {
   orders.push(newOrder);
   updateOrderNumberValue(orders.length);
   checkIfGameOver()
+  setBGOnFirstOrder()
 };
 
 function checkIfGameOver() {
@@ -327,7 +334,7 @@ function gameloop() {
   currentDifficulty = "hard"
   delay = currentDifficulty === "easy" ? 4000 : currentDifficulty === "medium" ? 3000 : 2000
   addNewOrder(currentDifficulty);
-  if (orders.length === 12) {
+  if (orders.length === ordersLimit) {
     gameover()
   }
 }
