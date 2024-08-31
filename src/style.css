@@ -1,7 +1,8 @@
 :root {
     --bg:#F5F7F8;
-    --accent1: #F4CE14;
-    --accent2: #495E57;
+    /* --accent1: #F4CE14; */
+    --accent1: #14eff4;
+    --accent2: #000000;
     --accent3: #45474B;
 }
 

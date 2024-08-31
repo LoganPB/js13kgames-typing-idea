@@ -325,13 +325,12 @@ function checkIfGameOver() {
 }
 
 function gameloop() {
-  // currentDifficulty =
-  //   numberOfValidOrders < 5
-  //     ? "easy"
-  //     : numberOfValidOrders < 10
-  //       ? "medium"
-  //       : "hard";
-  currentDifficulty = "hard"
+  currentDifficulty =
+    numberOfValidOrders < 5
+      ? "easy"
+      : numberOfValidOrders < 10
+        ? "medium"
+        : "hard";
   delay = currentDifficulty === "easy" ? 4000 : currentDifficulty === "medium" ? 3000 : 2000
   addNewOrder(currentDifficulty);
   if (orders.length === ordersLimit) {
