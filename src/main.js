@@ -8,7 +8,7 @@ let currentDifficulty = "easy";
 let numberOfValidOrders = 0;
 let lastCommandHasError = false;
 let scoreValue = 0;
-let ordersLimit = 12;
+let ordersLimit = 1200;
 
 const meals = [
   "smoothies",
