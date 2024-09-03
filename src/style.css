@@ -247,6 +247,8 @@ div#screen {
     background-color: #124A47;
     border-radius: 20px;
     border: 1px solid #020202;
+    position: relative;
+    z-index: 10;
 }
 
 div#screenback {
@@ -258,6 +260,7 @@ div#screenback {
     background: #124A47;
     border: 1px solid #020202;
     border-radius: 20px;
+    z-index: 20;
 }
 
 div#plant {
@@ -364,4 +367,45 @@ div#shinny5 {
         right: 2px;
 }
 
+div#vendor {
+    position: absolute;
+    top: -50px;
+    left: 20px;
+    
+}
 
+div#vendor div#headvendor {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #914252;
+    background: #FBEED2;
+    border-radius: 50%;
+    position: relative;
+    z-index: 1
+}
+
+div#vendor div#bodyvendor {
+    width: 80px;
+    height: 100px;
+    background: #FBEED2;
+    position: relative;
+    z-index: 5;
+    top: -20px;
+    border-radius: 40px 40px 50px 50px / 90px 90px 100px 100px;
+    border: 2px solid #914252;
+}
+
+div#vendor #eyes {
+    position: absolute;
+    display: flex;
+    gap: 20px;
+    left: 16px;
+    top: 16px;
+}
+
+div#vendor .eye {
+    width: 8px;
+    height: 20px;
+    background: #914252;
+    border-radius: 50px;
+}
