@@ -157,6 +157,7 @@ const qs = (e) => document.querySelector(e);
 const qsa = (e) => document.querySelectorAll(e);
 const ce = (e) => document.createElement(e);
 const inp = qs("#i");
+const bubble = qs("div#dialogBubble ul")
 
 qs("input[type='button']").addEventListener("click", () => {
   launchGame()
@@ -185,14 +186,19 @@ function removeLastOrder() {
   inp.value = "";
   updateOrderNumberValue(orders.length);
   lastCommandHasError = false;
-  setBGOnFirstOrder()
+  bubble.innerHTML = ""
+  if (orders.length > 0) {
+    displayLastOrderContent()
+  }
   return;
 }
 
-function setBGOnFirstOrder() {
-  // orders.forEach(o => o.classList.filter(c => c != "withBG"))
-  // orders.length > 0 && orders[0].classList.push("withBG")
-  listPeople.firstChild.classList.add("withBG")
+function displayLastOrderContent() {
+  orders[orders.length - 1].order.forEach((o) => {
+    const el = ce("li")
+    el.textContent = o;
+    bubble.append(el);
+  })
 }
 
 function updateScore(newScore) {
@@ -211,24 +217,17 @@ inp?.addEventListener("keydown", (ke) => {
     const firstOrder = orders[0];
     if (!firstOrder) return;
     // refuse command if total equal 13
-    const e = ce("li");
     const inpValue = inp.value.trim()
     if (
       firstOrder &&
       firstOrder.shouldEqual13 &&
-      inpValue === `refuse order ${firstOrder.orderId}`
+      inpValue === `refuse order`
     ) {
       removeLastOrder();
       updateScore(20);
-      e.textContent = "Order correctly refused";
       inp.value = "";
-      qs("div#orderInput>ul")?.append(e);
       return;
-    } else {
-      e.textContent = inpValue;
-
     }
-
     if (
       firstOrder.order.includes(inpValue) &&
       !firstOrder.shouldEqual13
@@ -239,7 +238,7 @@ inp?.addEventListener("keydown", (ke) => {
         if (!lastCommandHasError) updateScore(30);
         else updateScore(10);
       }
-      const ordLines = qsa("div#listHorizontal>div ul>li")
+      const ordLines = qsa("div#dialogBubble ul>li")
       const lineToThrough = Array.from(ordLines).find((line) => { return line.textContent === inpValue })
       if (lineToThrough) lineToThrough.style.textDecoration = "line-through"
       numberOfValidOrders++;
@@ -289,33 +288,16 @@ const generateOrder = (difficulty) => {
       return acc;
     }, []),
     shouldEqual13,
-    orderId: ++lastIdOrder,
   };
 };
 
 const addNewOrder = (difficulty) => {
-  const orderDiv = ce("div");
-  orderDiv.className = "order";
+  //TODO add new customer
   const newOrder = generateOrder(difficulty);
-  const title = ce("h3");
-  title.innerHTML = newOrder.orderId;
-  orderDiv.append(title);
-  orderDiv.style.zIndex = zIndex - 1;
-  zIndex--;
-  const list = ce("ul");
-  newOrder.order.forEach((e) => {
-    const el = ce("li");
-    el.innerHTML = e;
-    list.append(el);
-  });
 
-
-  orderDiv.append(list);
-  listPeople?.append(orderDiv);
   orders.push(newOrder);
   updateOrderNumberValue(orders.length);
   checkIfGameOver()
-  setBGOnFirstOrder()
 };
 
 function checkIfGameOver() {
@@ -333,6 +315,9 @@ function gameloop() {
         : "hard";
   delay = currentDifficulty === "easy" ? 4000 : currentDifficulty === "medium" ? 3000 : 2000
   addNewOrder(currentDifficulty);
+  if (orders.length === 1) {
+    displayLastOrderContent()
+  }
   if (orders.length === ordersLimit) {
     gameover()
   }
@@ -350,6 +335,5 @@ function gameover() {
   let hsText = ""
   if (!hs || scoreValue > hs) { localStorage.setItem("highscore", scoreValue); hsText = `<br/>Your new highscore is ${scoreValue}` } else { hsText = `Your highscore is ${hs}`; }
   goTextDiv.innerHTML = goText + hsText
-
 }
 
