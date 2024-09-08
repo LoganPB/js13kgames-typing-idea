@@ -157,7 +157,6 @@ const qs = (e) => document.querySelector(e);
 const qsa = (e) => document.querySelectorAll(e);
 const ce = (e) => document.createElement(e);
 const inp = qs("#i");
-const bubble = qs("div#dialogBubble ul")
 
 qs("input[type='button']").addEventListener("click", () => {
   launchGame()
@@ -186,7 +185,8 @@ function removeLastOrder() {
   inp.value = "";
   updateOrderNumberValue(orders.length);
   lastCommandHasError = false;
-  bubble.innerHTML = ""
+  listCustomers.removeChild(listCustomers.lastChild)
+  listOrder.innerHTML = "";
   if (orders.length > 0) {
     displayLastOrderContent()
   }
@@ -194,10 +194,20 @@ function removeLastOrder() {
 }
 
 function displayLastOrderContent() {
-  orders[orders.length - 1].order.forEach((o) => {
+  if (typeof listOrder !== "undefined") listOrder.innerHTML = "";
+  else {
+    let d = ce("div")
+    d.id = "dialogBubble"
+    let l = ce("ul")
+    l.id = "listOrder"
+    d.append(l)
+    const lc = listCustomers.lastChild
+    lc.append(d)
+  }
+  orders[0].order.forEach((o) => {
     const el = ce("li")
     el.textContent = o;
-    bubble.append(el);
+    listOrder.append(el);
   })
 }
 
@@ -215,6 +225,7 @@ function updateOrdersLimit(_orderLimits) {
 inp?.addEventListener("keydown", (ke) => {
   if (ke.key === "Enter") {
     const firstOrder = orders[0];
+    console.log(firstOrder.order)
     if (!firstOrder) return;
     // refuse command if total equal 13
     const inpValue = inp.value.trim()
@@ -243,15 +254,12 @@ inp?.addEventListener("keydown", (ke) => {
       if (lineToThrough) lineToThrough.style.textDecoration = "line-through"
       numberOfValidOrders++;
     } else {
-      e.style.color = "red";
       updateOrdersLimit(ordersLimit - 1)
-
       checkIfGameOver()
       lastCommandHasError = true;
     }
 
     inp.value = "";
-    // qs("div#orderInput>ul")?.append(e);
   }
 });
 
@@ -259,7 +267,7 @@ const generateRandomMinMax = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
 const generateOrder = (difficulty) => {
-  let shouldEqual13 = Math.random() > 0.5;
+  let shouldEqual13 = Math.random() > 0.4;
   let numberOfItems = shouldEqual13 ? 13 : generateRandomMinMax(1, 25);
   shouldEqual13 = numberOfItems === 13;
 
@@ -291,11 +299,25 @@ const generateOrder = (difficulty) => {
   };
 };
 
-const addNewOrder = (difficulty) => {
-  //TODO add new customer
-  const newOrder = generateOrder(difficulty);
+function generateCustomer() {
+  const head = ce("div")
+  head.classList.add('headCustomer')
+  const body = ce("div")
+  body.classList.add('bodyCustomer')
+  const cust = ce("div")
+  cust.classList.add('customer')
 
+  cust.append(head)
+  cust.append(body)
+
+  if (orders.length < 13) listCustomers.append(cust)
+}
+
+const addNewOrder = (difficulty) => {
+  console.log("add new order")
+  const newOrder = generateOrder(difficulty);
   orders.push(newOrder);
+  generateCustomer()
   updateOrderNumberValue(orders.length);
   checkIfGameOver()
 };

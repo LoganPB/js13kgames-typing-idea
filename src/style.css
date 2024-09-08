@@ -11,7 +11,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-: monospace;
+    font-family: monospace;
 }
 
 html {
@@ -115,6 +115,13 @@ div#orderInput {
     font-size: 30px;
     display: flex;
     flex-direction: column;
+}
+
+div#orderInput p {
+    font-size: 15px;
+    text-align: center;
+    padding-bottom: 15px;
+    color: darkslategrey;
 }
 
 div#orderInput ul {
@@ -412,14 +419,16 @@ div#vendor .eye {
     border-radius: 50px;
 }
 
-div#orders {
+
+div#orders ul#listCustomers{
     width:40%;
     display: flex;
     flex-direction: row-reverse;
+    height: 240px;
 }
 
 div#orders div.customer {
-    
+   position: relative; 
 }
 
 div#orders div.customer div.headCustomer {
@@ -450,6 +459,20 @@ div#dialogBubble {
     border: 2px solid #F49AA3;
     position: absolute;
     bottom: 260px;
-    left: 380px;
-    
+    left: 80px;
+    border-radius: 20px;
+    padding: 20px;
 }
+
+div#dialogBubble::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    top: 99%;
+    left: -4%;
+    border-radius: 20px;
+    border: 1px solid #F49AA3;
+}
+
