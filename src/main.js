@@ -1,14 +1,12 @@
 import "./style.css";
 const orders = [];
-let lastIdOrder = 0;
 let delay = 4000;
-let zIndex = 1000;
 let currentDifficulty = "easy";
 
 let numberOfValidOrders = 0;
 let lastCommandHasError = false;
 let scoreValue = 0;
-let ordersLimit = 1200;
+let ordersLimit = 12;
 
 const meals = [
   "smoothies",
