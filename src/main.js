@@ -166,6 +166,7 @@ let gameTO = null
 
 function launchGame() {
   qs('div#startScreen').style.display = "none"
+  qs('div#gameScreen').style.display = "flex"
   qs('div#stats').style.display = "flex"
   gameTO = setInterval(gameloop, delay);
 

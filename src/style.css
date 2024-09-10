@@ -39,7 +39,7 @@ div#startScreen, div#gameOverScreen {
 
 div#gameScreen {
     height:100%;
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: space-between;
 }
@@ -48,14 +48,23 @@ div#gameOverScreen {
     display: none;
 }
 
-div#startScreen div, div#gameOverScreen div{
+div#startScreen>div, div#gameOverScreen>div{
     width: 70%;
+    margin: auto;
+}
+
+div#startscreen>input {
     margin: auto;
 }
 
 div#startScreen div h1 , div#gameOverScreen div h1{
     text-align: center;
     margin: 50px 0px;
+}
+
+div#startScreen h2 {
+    padding-top: 30px;
+    padding-bottom: 15px;
 }
 
 div#startScreen div input {
