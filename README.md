@@ -1,6 +1,7 @@
 # 13th Restaurant Rush: A Test of Speed and Tradition
 
 [Github link to the game](https://loganpb.github.io/js13kgames-typing-idea/)
+
 This project was part of the JS13kGames gamejam.
 
 In 13th Restaurant Rush, speed is key, but tradition is just as important! According to an old saying, there should never be more than 12 people seated at a table. This restaurant takes that very seriously, and it’s up to you to maintain the balance while typing orders as fast as possible!
