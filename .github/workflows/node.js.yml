@@ -24,6 +24,8 @@ jobs:
       # Upload artifact for GitHub Pages
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3.0.1
+        with:
+          path: ./dist
 
   # Deploy job
   deploy:
