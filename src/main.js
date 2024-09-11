@@ -180,6 +180,8 @@ function updateOrderNumberValue(newValue) {
 }
 
 function setMessageDisplayer(message) {
+  messageDisplayer.style.animation = "none"
+  messageDisplayer.offsetHeight;
   messageDisplayer.style.display = "flex"
   messageDisplayer.innerHTML = message
   messageDisplayer.style.animation = "gAnim 2s ease-in-out 0s 1 normal forwards"
@@ -264,13 +266,13 @@ inp?.addEventListener("keydown", (ke) => {
       if (lineToThrough) lineToThrough.style.textDecoration = "line-through"
       numberOfValidOrders++;
     } else {
+      updateOrdersLimit(ordersLimit - 1)
       if (firstOrder.shouldEqual13) {
         setMessageDisplayer("Did you count correctly?")
       } else {
         setMessageDisplayer(`${ordersLimit} life left`)
       }
 
-      updateOrdersLimit(ordersLimit - 1)
       checkIfGameOver()
       lastCommandHasError = true;
     }
