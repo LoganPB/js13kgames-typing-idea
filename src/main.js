@@ -371,9 +371,9 @@ function gameover() {
   goTextDiv.append(goText)
 
   //check localstorage for highscore
-  const hs = localStorage.getItem("highscore")
+  const hs = localStorage.getItem("never13_highscore")
   let hsText = ""
-  if (!hs || scoreValue > hs) { localStorage.setItem("highscore", scoreValue); hsText = `<br/>Your new highscore is ${scoreValue}` } else { hsText = `Your highscore is ${hs}`; }
+  if (!hs || scoreValue > hs) { localStorage.setItem("never13_highscore", scoreValue); hsText = `<br/>Your new highscore is ${scoreValue}` } else { hsText = `Your highscore is ${hs}`; }
   goTextDiv.innerHTML = goText + hsText
 }
 
