@@ -267,7 +267,7 @@ const generateRandomMinMax = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
 const generateOrder = (difficulty) => {
-  let shouldEqual13 = Math.random() > 0.4;
+  let shouldEqual13 = Math.random() > 0.3;
   let numberOfItems = shouldEqual13 ? 13 : generateRandomMinMax(1, 25);
   shouldEqual13 = numberOfItems === 13;
 
