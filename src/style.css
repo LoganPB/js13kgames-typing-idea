@@ -430,7 +430,7 @@ div#vendor .eye {
 
 
 div#orders ul#listCustomers{
-    width:40%;
+    width:53%;
     display: flex;
     flex-direction: row-reverse;
     height: 240px;
