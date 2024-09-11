@@ -178,6 +178,16 @@ function updateOrderNumberValue(newValue) {
   const orderNumber = qs("div#stats>div#numberOfCurrentOrders");
   orderNumber.textContent = (newValue > 1 ? "Orders: " : "Order :") + newValue + " / " + ordersLimit;
 }
+
+function setMessageDisplayer(message) {
+  messageDisplayer.style.display = "flex"
+  messageDisplayer.innerHTML = message
+  messageDisplayer.style.animation = "gAnim 2s ease-in-out 0s 1 normal forwards"
+  setTimeout(() => {
+    messageDisplayer.style.display = "none"
+  }, 2000);
+}
+
 function removeLastOrder() {
   const inp = qs("#i");
   orders.shift();
@@ -254,6 +264,12 @@ inp?.addEventListener("keydown", (ke) => {
       if (lineToThrough) lineToThrough.style.textDecoration = "line-through"
       numberOfValidOrders++;
     } else {
+      if (firstOrder.shouldEqual13) {
+        setMessageDisplayer("Did you count correctly?")
+      } else {
+        setMessageDisplayer(`${ordersLimit} life left`)
+      }
+
       updateOrdersLimit(ordersLimit - 1)
       checkIfGameOver()
       lastCommandHasError = true;
